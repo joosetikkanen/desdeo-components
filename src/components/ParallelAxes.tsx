@@ -113,14 +113,13 @@ const ParallelAxes = ({
       .append("g")
       .attr("transform", `translate( 0 ${dimensions.marginTop})`);
 
+    // add event listener to the SVG element, which will handle the drag events
     const yAxisDrag = drag<SVGGElement, unknown>()
       .on("drag", function(event) {
-        //console.log(event.y)
-        const newX = event.x;
-        select(this).attr("transform", `translate(${newX}, ${
+        select(this).attr("transform", `translate(${event.x}, ${
           dimensions.marginTop
         })`);
-  });
+    } );
 
     // position the axises
     // y-axis
@@ -134,6 +133,7 @@ const ParallelAxes = ({
           })`
         )
         .call(yAxixes()[i].tickSizeOuter(0))
+        .style("cursor", "move")
         .call(yAxisDrag);
       axis.selectAll("text").attr("font-size", "20px");
       axis
