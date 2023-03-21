@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { select, Selection, pointer } from "d3-selection";
-import { scaleLinear, scaleBand } from "d3-scale";
+import { scaleLinear, scaleBand, scaleOrdinal } from "d3-scale";
 import { axisLeft } from "d3-axis";
 import { line } from "d3-shape";
 import "d3-transition";
@@ -114,7 +114,13 @@ const ParallelAxes = ({
       .attr("transform", `translate( 0 ${dimensions.marginTop})`);
 
     // add event listener to the SVG element, which will handle the drag events
+    let dragging = {}
     const yAxisDrag = drag<SVGGElement, unknown>()
+      .on("start", function(d: DragEvent) {
+        // dragging[d] = scaleOrdinal(d);
+        console.log(d)
+        // console.log(scaleOrdinal(d.))
+      })
       .on("drag", function(event) {
         select(this).attr("transform", `translate(${event.x}, ${
           dimensions.marginTop
