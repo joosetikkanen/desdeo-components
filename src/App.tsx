@@ -79,21 +79,29 @@ function App() {
   const [pData, setData] = useState<NavigationData>(emptyData);
 
   return (
-    <div style={{ width: "1200px", height: "1000px", float: "left" }}>
-      <NavigationBars
-        problemInfo={susProbInfo}
-        problemData={pData}
-        referencePoints={refData}
-        boundaries={bound}
-        handleReferencePoint={(ref: number[][]) => {
-          setRefData(ref);
-        }} // handles should do nothing right now
-        handleBound={(bound: number[][]) => {
-          setBound(bound);
-        }}
-        handleGoBack={(step: number) => console.log(step)}
-      />
-    </div>
+    <>
+      <div><ParallelAxes
+            handleSelection={() => console.log("asd")}
+            objectiveData={exampleDataSimple3Objectives}
+            selectedIndices={[]}
+             ></ParallelAxes>
+      </div>
+      <div style={{ width: "1200px", height: "1000px", float: "left" }}>
+        <NavigationBars
+          problemInfo={susProbInfo}
+          problemData={pData}
+          referencePoints={refData}
+          boundaries={bound}
+          handleReferencePoint={(ref: number[][]) => {
+            setRefData(ref);
+          }} // handles should do nothing right now
+          handleBound={(bound: number[][]) => {
+            setBound(bound);
+          }}
+          handleGoBack={(step: number) => console.log(step)}
+        />
+      </div>
+    </>
   );
 }
 

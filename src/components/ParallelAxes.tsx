@@ -10,6 +10,7 @@ import { ObjectiveData } from "../types/ProblemTypes";
 import { RectDimensions } from "../types/ComponentTypes";
 import { filter } from "d3-array";
 import { active } from "d3-transition";
+import { drag } from "d3-drag";
 
 interface ParallelAxesProps {
   objectiveData: ObjectiveData;
@@ -111,6 +112,16 @@ const ParallelAxes = ({
     const chart = selection
       .append("g")
       .attr("transform", `translate( 0 ${dimensions.marginTop})`);
+
+    const yAxisDrag = drag<SVGGElement, unknown>()
+      .on("drag", function(event) {
+        //console.log(event.y)
+        const newX = event.x;
+        select(this).attr("transform", `translate(${newX}, ${
+          dimensions.marginTop
+        })`);
+  });
+
     // position the axises
     // y-axis
     data.names.map((name, i) => {
@@ -122,7 +133,8 @@ const ParallelAxes = ({
             dimensions.marginTop
           })`
         )
-        .call(yAxixes()[i].tickSizeOuter(0));
+        .call(yAxixes()[i].tickSizeOuter(0))
+        .call(yAxisDrag);
       axis.selectAll("text").attr("font-size", "20px");
       axis
         .append("text")
