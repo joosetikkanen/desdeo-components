@@ -113,6 +113,21 @@ const ParallelAxes = ({
       .append("g")
       .attr("transform", `translate( 0 ${dimensions.marginTop})`);
 
+    // create lines data
+    const linesData = (dataset: ObjectiveData) =>
+    dataset.values.map((datum) => {
+      return datum.value.map((v, i) => {
+        return [x().call(x, data.names[i]) as number, ys()[i](v)];
+      });
+    });
+    const lines = linesData(data).map((datum) => {
+      return line()(
+        datum.map((d) => {
+          return [d[0], d[1]];
+        })
+      );
+    });
+
     // add event listener to the SVG element, which will handle the drag events
     let dragging = {}
     const yAxisDrag = drag<SVGGElement, unknown>()
@@ -125,7 +140,21 @@ const ParallelAxes = ({
         select(this).attr("transform", `translate(${event.x}, ${
           dimensions.marginTop
         })`);
-    } );
+
+        selection
+        .selectAll(".visualPath")
+        .attr("transform", `translate(${event.x})`)
+        selection
+        .selectAll(".pathDetector")
+        .attr("transform", `translate(${event.x})`)
+        
+    
+        console.log(lines)
+
+      })
+      .on("end", function(d: DragEvent) {
+        console.log(d)
+      });
 
     // position the axises
     // y-axis
@@ -153,20 +182,7 @@ const ParallelAxes = ({
         .style("fill", "black");
     });
 
-    // create lines data
-    const linesData = (dataset: ObjectiveData) =>
-      dataset.values.map((datum) => {
-        return datum.value.map((v, i) => {
-          return [x().call(x, data.names[i]) as number, ys()[i](v)];
-        });
-      });
-    const lines = linesData(data).map((datum) => {
-      return line()(
-        datum.map((d) => {
-          return [d[0], d[1]];
-        })
-      );
-    });
+
 
     // outline for the oldAlternative. TODO: decide on good color. Grey gets overrun by darker colors,
     if (oldSol !== undefined) {
